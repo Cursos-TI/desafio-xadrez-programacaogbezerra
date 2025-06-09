@@ -1,32 +1,72 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
-// Desafio de Xadrez - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de movimentação das peças de xadrez.
-// O objetivo é utilizar estruturas de repetição e funções para determinar os limites de movimentação dentro do jogo.
+int movimentoRei(int x1, int y1, int x2, int y2) {
+    return abs(x1 - x2) <= 1 && abs(y1 - y2) <= 1;
+}
+
+int movimentoTorre(int x1, int y1, int x2, int y2) {
+    return x1 == x2 || y1 == y2;
+}
+
+int movimentoBispo(int x1, int y1, int x2, int y2) {
+    return abs(x1 - x2) == abs(y1 - y2);
+}
+
+int movimentoRainha(int x1, int y1, int x2, int y2) {
+    return movimentoTorre(x1, y1, x2, y2) || movimentoBispo(x1, y1, x2, y2);
+}
+
+int coordenadaValida(int x, int y) {
+    return x >= 1 && x <= 8 && y >= 1 && y <= 8;
+}
 
 int main() {
-    // Nível Novato - Movimentação das Peças
-    // Sugestão: Declare variáveis constantes para representar o número de casas que cada peça pode se mover.
+    char peca[10];
+    int x1, y1, x2, y2;
 
-    // Implementação de Movimentação do Bispo
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação do Bispo em diagonal.
+    printf("=== DESAFIO DE PEÇAS DE XADREZ ===\n");
+    printf("Escolha a peça (Rei, Torre, Bispo, Rainha): ");
+    scanf("%s", peca);
 
-    // Implementação de Movimentação da Torre
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação da Torre para a direita.
+    // Transforma para minúsculas
+    for (int i = 0; peca[i]; i++) {
+        peca[i] = tolower(peca[i]);
+    }
 
-    // Implementação de Movimentação da Rainha
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação da Rainha para a esquerda.
+    printf("Informe a posição atual (linha coluna, de 1 a 8): ");
+    scanf("%d %d", &x1, &y1);
 
-    // Nível Aventureiro - Movimentação do Cavalo
-    // Sugestão: Utilize loops aninhados para simular a movimentação do Cavalo em L.
-    // Um loop pode representar a movimentação horizontal e outro vertical.
+    printf("Informe a posição de destino (linha coluna, de 1 a 8): ");
+    scanf("%d %d", &x2, &y2);
 
-    // Nível Mestre - Funções Recursivas e Loops Aninhados
-    // Sugestão: Substitua as movimentações das peças por funções recursivas.
-    // Exemplo: Crie uma função recursiva para o movimento do Bispo.
+    if (!coordenadaValida(x1, y1) || !coordenadaValida(x2, y2)) {
+        printf("Posições inválidas. Use valores de 1 a 8.\n");
+        return 1;
+    }
 
-    // Sugestão: Implemente a movimentação do Cavalo utilizando loops com variáveis múltiplas e condições avançadas.
-    // Inclua o uso de continue e break dentro dos loops.
+    int valido = 0;
+
+    if (strcmp(peca, "rei") == 0) {
+        valido = movimentoRei(x1, y1, x2, y2);
+    } else if (strcmp(peca, "torre") == 0) {
+        valido = movimentoTorre(x1, y1, x2, y2);
+    } else if (strcmp(peca, "bispo") == 0) {
+        valido = movimentoBispo(x1, y1, x2, y2);
+    } else if (strcmp(peca, "rainha") == 0) {
+        valido = movimentoRainha(x1, y1, x2, y2);
+    } else {
+        printf("Peça inválida.\n");
+        return 1;
+    }
+
+    if (valido) {
+        printf("Movimento VÁLIDO para a peça %s.\n", peca);
+    } else {
+        printf("Movimento INVÁLIDO para a peça %s.\n", peca);
+    }
 
     return 0;
 }
